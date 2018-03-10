@@ -1,0 +1,93 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @questionnaire.name %>
+</p>
+
+<%= form_with(:model => Questionnaire, url: questionnaire_questions_assoc_path(@questionnaire)) do |f| %>
+
+  <div class="left">
+    <%= f.select(:no_assoc, @remainning_questions.map{ |item| [item.question, item.id] }, {}, {:multiple => true, :size => 10, :id => "no_assoc"}) %>
+  </div>
+
+
+
+  <div class="right">
+    <%= f.select(:questions, @questionnaire_questions.map{ |item| [item.question, item.id] }, {}, {:multiple => true, :size => 10, :id => "assoc"}) %>
+  </div>
+  <div>
+    <button class="controll" id="add_all">ADD ALL</button><br />
+    <button class="controll" id="add">ADD</button><br />
+    <button class="controll" id="remove">REMOVE</button><br />
+    <button class="controll" id="remove_all">REMOVE ALL</button><br />
+  </div>
+  <div class="right">
+    <button class="controll" id="up">UP</button>
+    <button class="controll" id="down">DOWN</button>
+  </div>
+
+<% end %>
+<div class="clear">
+  <button id="send">SEND</button>
+</div>
+
+
+<%= link_to 'Edit', edit_questionnaire_path(@questionnaire) %> |
+<%= link_to 'Back', questionnaires_path %>
+
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#add_all").on("click", function(){
+        $("select#no_assoc option").each(function(){
+            $("select#assoc").append($('<option>',{value: $(this).attr("value"), text: $(this).html()}));
+            $(this).remove();
+        });
+        return false;
+    });
+    $("#add").on("click", function(){
+        $("select#no_assoc option:selected").each(function(){
+            $("select#assoc").append($('<option>',{value: $(this).attr("value"), text: $(this).html()}));
+            $(this).remove();
+        });
+        return false;
+    });
+    $("#remove").on("click", function(){
+        $("select#assoc option:selected").each(function(){
+            $("select#no_assoc").append($('<option>',{value: $(this).attr("value"), text: $(this).html()}));
+            $(this).remove();
+        });
+        return false;
+    });
+    $("#remove_all").on("click", function(){
+        $("select#assoc option").each(function(){
+            $("select#no_assoc").append($('<option>',{value: $(this).attr("value"), text: $(this).html()}));
+            $(this).remove();
+        });
+        return false;
+    });
+    $("button#send").on("click", function(){
+        $("select#assoc option").each(function(){
+            $(this).attr("selected", "selected");
+        });
+        $("form").submit();
+    });
+
+    $("button#up").on("click", function(){
+      $("select#assoc option:selected").each(function(){
+        var op = $(this);
+        op.first().prev().before(op);
+      });
+      return false;
+    });
+
+    $("button#down").on("click", function(){
+      $("select#assoc option:selected").each(function(){
+        var op = $(this);
+        op.first().next().after(op);
+      });
+      return false;
+    });
+  });
+</script>

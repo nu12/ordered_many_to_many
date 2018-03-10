@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>OrderedManyToMany</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+  <nav>
+    <ul>
+      <li><%= link_to "Questionnaires", questionnaires_url %></li>
+      <li><%= link_to "Questionns", questions_url %></li>
+    </ul>
+  </nav>
+    <%= yield %>
+  </body>
+</html>
